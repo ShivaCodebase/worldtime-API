@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="457443da-1209-4732-bbdf-a2f4fc7fcf77" basePath="/timezone" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8b69afdd-5e0b-4d95-837f-21f53a9f3bc9" basePath="/api/timezone/">
+		<http:request-connection host="worldtimeapi.org" />
+	</http:request-config>
+	<flow name="world-time-zone-apiFlow" doc:id="a4b0df39-f2fb-4f66-ba87-5283e58b673d" >
+		<http:listener doc:name="Listener" doc:id="3898890f-56cb-4544-b81f-72e61f367317" config-ref="HTTP_Listener_config" path="/{region}/{city}"/>
+		<http:request method="GET" doc:name="Request" doc:id="1ccda753-aac8-4414-b7f2-55eba87c9717" config-ref="HTTP_Request_configuration" path="/{area}/{location}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	area : attributes.uriParams.region,
+	location: attributes.uriParams.city
+	
+}]]]></http:uri-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="99b4ae46-f652-4b1f-b9d3-b5cf14ea45fe" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"abbreviation": payload.abbreviation,
+	"datetime": payload.datetime,
+	"timezone": payload.timezone
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
