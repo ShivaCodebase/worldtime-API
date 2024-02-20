@@ -30,6 +30,7 @@ output application/json
 {
 	"abbreviation": payload.abbreviation,
 	"datetime": payload.datetime,
+	
 	"timezone": payload.timezone
 }]]></ee:set-payload>
 			</ee:message>
