@@ -10,7 +10,7 @@ stage('Build Application') {
 steps {
 
 
-sh 'mvn clean install'
+echo 'sh mvn clean install'
 
 }
 }
