@@ -11,9 +11,11 @@ pipeline {
             }
         }
 
-        stage ('final') {
+        stage ('deploy CloudHub') {
             steps {
-                echo 'This is a minimal pipeline.'
+                echo '!!!!!!!!! Deployment started !!!!!!!!'
+                 sh "mvn clean deploy -DmuleDeploy"
+
             }
         }
     }
