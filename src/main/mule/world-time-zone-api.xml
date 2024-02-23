@@ -8,11 +8,13 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="457443da-1209-4732-bbdf-a2f4fc7fcf77" basePath="/timezone" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
-	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8b69afdd-5e0b-4d95-837f-21f53a9f3bc9" basePath="/api/timezone/">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8b69afdd-5e0b-4d95-837f-21f53a9f3bc9" basePath="/api/timezone">
 		<http:request-connection host="worldtimeapi.org" />
 	</http:request-config>
 	<flow name="world-time-zone-apiFlow" doc:id="a4b0df39-f2fb-4f66-ba87-5283e58b673d" >
 		<http:listener doc:name="Listener" doc:id="3898890f-56cb-4544-b81f-72e61f367317" config-ref="HTTP_Listener_config" path="/{region}/{city}"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b1ce1c8a-a85a-4134-a205-0f116acf66e7" message='#["flow started @@@@@@@@@@@@"]'/>
+		<logger level="INFO" doc:name="Logger" doc:id="94adc575-1fd9-4481-aef3-530ca6ebec62" message="#[attributes]" category="@@@@@@@@ logs for attributes @@@@@@@"/>
 		<http:request method="GET" doc:name="Request" doc:id="1ccda753-aac8-4414-b7f2-55eba87c9717" config-ref="HTTP_Request_configuration" path="/{area}/{location}">
 			<http:uri-params ><![CDATA[#[output application/java
 ---
@@ -35,5 +37,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="3d8ae8fb-1304-48ca-8fbe-6834a8c5b602" message="#[payload]" category="final response"/>
 	</flow>
 </mule>
