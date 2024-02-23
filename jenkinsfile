@@ -1,20 +1,15 @@
 pipeline {
     agent any
-     tools 
-   { 
-        maven 'Maven 3.9.6' 
-      
-    }
+ 
     stages {
-        stage ('Initialize') {
+        stage ('Build') {
             steps {
-                sh '''
-                    echo "M2_HOME = ${M2_HOME}"
-                ''' 
+                sh "mvn -version"
+                sh "mvn clean install"
             }
         }
 
-        stage ('Build') {
+        stage ('final') {
             steps {
                 echo 'This is a minimal pipeline.'
             }
